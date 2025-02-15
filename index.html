@@ -1,79 +1,60 @@
-document.addEventListener('DOMContentLoaded', () => {
-    fetchDoctors();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Agency</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Travel Agency Management</h1>
 
-    document.getElementById('register-form').addEventListener('submit', function (event) {
-        event.preventDefault();
-        registerUser();
-    });
+    <div class="form-section">
+        <h3>User Registration</h3>
+        <form id="registerForm">
+            <input type="text" id="registerName" placeholder="Name" required><br>
+            <input type="email" id="registerEmail" placeholder="Email" required><br>
+            <input type="password" id="registerPassword" placeholder="Password" required><br>
+            <button type="button" onclick="registerUser()">Register</button>
+        </form>
+    </div>
 
-    document.getElementById('appointment-form').addEventListener('submit', function (event) {
-        event.preventDefault();
-        bookAppointment();
-    });
-});
+    <div class="form-section">
+        <h3>User Login</h3>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email" required><br>
+            <input type="password" id="loginPassword" placeholder="Password" required><br>
+            <button type="button" onclick="loginUser()">Login</button>
+        </form>
+    </div>
 
-// Fetch list of doctors
-function fetchDoctors() {
-    fetch('http://localhost:3000/doctors')
-        .then(response => response.json())
-        .then(doctors => {
-            const doctorList = document.getElementById('doctor-list');
-            doctorList.innerHTML = '';
-            doctors.forEach(doctor => {
-                const li = document.createElement('li');
-                li.textContent = `${doctor.ID} - ${doctor.NAME} (Specialty: ${doctor.SPECIALTY})`;
-                doctorList.appendChild(li);
-            });
-        })
-        .catch(error => console.error('Error fetching doctors:', error));
-}
+    <div class="form-section">
+        <h3>View All Flights</h3>
+        <button onclick="getAllFlights()">Get Flights</button>
+        <div id="flightsList"></div>
+    </div>
 
-// Register a new user
-function registerUser() {
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    fetch('http://localhost:3000/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-    })
-    .then(response => response.json())
-    .then(data => alert(data.message))
-    .catch(error => console.error('Error registering user:', error));
-}
+   
+    <div class="form-section">
+        <h3>Add Flight (Admin)</h3>
+        <form id="addFlightForm">
+            <input type="text" id="origin" placeholder="Origin" required><br>
+            <input type="text" id="destination" placeholder="Destination" required><br>
+            <input type="date" id="flightDate" required><br>
+            <input type="number" id="quantity" placeholder="Quantity" required><br>
+            <button type="button" onclick="addFlight()">Add Flight</button>
+        </form>
+    </div>
 
-// Book an appointment
-function bookAppointment() {
-    const userId = document.getElementById('user-id').value;
-    const doctorId = document.getElementById('doctor-id').value;
-    const appointmentDate = document.getElementById('appointment-date').value;
-    
-    fetch('http://localhost:3000/appointments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, doctorId, appointmentDate })
-    })
-    .then(response => response.json())
-    .then(data => alert(data.message))
-    .catch(error => console.error('Error booking appointment:', error));
-}
-
-// Fetch user appointments
-function fetchAppointments() {
-    const userId = document.getElementById('user-id-view').value;
-    
-    fetch(`http://localhost:3000/appointments/${userId}`)
-        .then(response => response.json())
-        .then(appointments => {
-            const appointmentList = document.getElementById('appointment-list');
-            appointmentList.innerHTML = '';
-            appointments.forEach(appointment => {
-                const li = document.createElement('li');
-                li.textContent = `Appointment with Doctor ID: ${appointment.DOCTOR_ID} on ${appointment.APPOINTMENT_DATE} (Status: ${appointment.STATUS})`;
-                appointmentList.appendChild(li);
-            });
-        })
-        .catch(error => console.error('Error fetching appointments:', error));
-}
+    <script src="app.js"></script>
+</body>
+</html>
